@@ -287,22 +287,28 @@ def main():
 
   while True:
     # Generate members, insert them, wait
-    new_member_list = new_members(random.randint(3,10))
+    members_to_add = random.randint(3,10)
+    new_member_list = new_members(members_to_add)
     insert_members(con, new_member_list)
     num_mems = len(_member_cache)
+    print("members added at %s" % datetime.now())
     sleep(delay_seconds)
     # Generate events, insert them, wait
     #   One bug - can't really tell the order that all of these account changes are taking place in
     #   Should I actually be logging when these events take place?  Spacing them out?
     # Also, the signup event isn't actually captured
     #   I should do this in the ETL!
-    new_event_list = new_events(con, num_mems * random.randint(1,5))
+    events_to_add = int(num_mems**0.5) * random.randint(1,3)
+    new_event_list = new_events(con, events_to_add)
     insert_events(con, new_event_list)
+    print("events added at %s" % datetime.now())
     sleep(delay_seconds)
     # Generate payments, insert them, wait
     #   Do I have to worry about the start?  What if there are no payments to insert, is that a problem?
-    new_payment_list = new_payments(con, num_mems / 2)
+    payments_to_add = int(num_mems**0.2) * random.randint(1,3)
+    new_payment_list = new_payments(con, payments_to_add)
     insert_payments(con, new_payment_list)
+    print("payments added at %s" % datetime.now())
     sleep(delay_seconds)
 
 if __name__ == "__main__":
