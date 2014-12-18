@@ -1,5 +1,6 @@
 import MySQLdb
 import MySQLdb.cursors
+from datetime import datetime
 
 def new_con(host, user, passwd, db):
   return MySQLdb.connect(host, user, passwd, db)
@@ -40,3 +41,13 @@ def into_outfile(con, path, f, table):
   cur.execute(sql_str)
   con.commit()
   return True
+
+# File naming
+def underscorify(s):
+  ns = str(s)
+  for rs in ["-", " ", ":", "."]:
+    ns = ns.replace(rs, "_")
+  return ns
+
+def outfile_name(s):
+  return underscorify( "%s_%s.csv" % (s, underscorify(datetime.now())) )
